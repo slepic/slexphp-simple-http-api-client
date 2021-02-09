@@ -101,7 +101,12 @@ class PsrApiClientTest extends TestCase
     {
         return [
             [
-                function (MockObject $requestFactory, MockObject $client, MockObject $requestSerializer, MockObject $responseDeserializer) {
+                function (
+                    MockObject $requestFactory,
+                    MockObject $client,
+                    MockObject $requestSerializer,
+                    MockObject $responseDeserializer
+                ) {
                     $request = self::createMock(RequestInterface::class);
                     $requestFactory->expects(self::once())
                         ->method('createRequest')
