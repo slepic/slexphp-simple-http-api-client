@@ -1,0 +1,39 @@
+{
+    "name": "slexphp/simple-http-api-client",
+    "description": "A simple PSR compatible JSON HTTP API client",
+    "keywords": ["JSON", "API", "Client", "PSR", "REST", "HTTP"],
+    "homepage": "https://github.com/slepic/slexphp-simple-http-api-client",
+    "type": "library",
+    "require": {
+        "php": ">=7.4",
+        "psr/http-factory": "^1.0",
+        "psr/http-client": "^1.0",
+        "slexphp/json-serialization": "dev-master"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "slepic",
+            "email": "gslepic@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Slexphp\\Http\\BodySerialization\\": "src/BodySerialization",
+            "Slexphp\\Http\\SimpleApiClient\\": "src/SimpleApiClient"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Slexphp\\Tests\\Http\\BodySerialization\\": "tests/BodySerialization",
+            "Slexphp\\Tests\\Http\\SimpleApiClient\\": "tests/SimpleApiClient"
+        }
+    },
+    "require-dev": {
+        "vimeo/psalm": "^4.2",
+        "phpunit/phpunit": "^9.5",
+        "squizlabs/php_codesniffer": "^3.5"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
