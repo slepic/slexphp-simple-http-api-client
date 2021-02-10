@@ -145,6 +145,10 @@ class PsrApiClient implements ApiClientInterface
         /** @var array|null $parsedResponse */
         $apiResponse = new ApiResponse($status, $responseHeaders, $responseBody, $parsedResponse ?? null);
 
+        if ($status < 200 || $status >= 300) {
+            $errorMessage = \sprintf('Server returned error status code %d', $status);
+        }
+
         if ($errorMessage !== null) {
             throw $this->createException(
                 $psrRequest,
