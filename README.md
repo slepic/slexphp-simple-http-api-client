@@ -16,7 +16,8 @@ This class provides a static `create()` method.
 
 It accepts a psr client and request factory and creates an instance of `ApiClientInterface` (see below)..
 
-The `create()` method with it's first two arguments are the only part of public API of this library.
+The `create()` method with it's first two arguments (plus return type and thrown exception interfaces),
+are the only part of public API of this library.
 
 The actual returned class as well as any details behind it should not be relied upon at this point.
 
@@ -58,8 +59,12 @@ and it offers `getParsedBody()` method so that you dont need to worry about pars
 This interface describes all possible errors that can occur during a http call
 or during (de)serialization of request/response messages.
 
+### Example
 
-And all requests are hidden in a single method `call` with several arguments:
+In this example we already created a client instance and we make a single http call.
+Then we show all the methods of the response/error api while we 
+make all possible assertions that are always going to be true. 
+
 ```
 try {
     $response = $jsonClient->call(
