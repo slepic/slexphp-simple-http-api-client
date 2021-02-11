@@ -20,8 +20,6 @@ The `create()` method with it's first two arguments are the only part of public 
 
 The actual returned class as well as any details behind it should not be relied upon at this point.
 
-
-Wrap a PSR request factory and a PSR client with a JsonClient instance.
 ```
 $jsonClient = JsonApiClient::create($psrRequestFactory, $psrClient);
 ```
@@ -39,8 +37,15 @@ $client->call($baseUrl, $method, $endpoint, $query, $headers, $body);
 
 It will also process request body serialization and response body deserialization
 according to passed and received content-type headers.
-Implementation should by default fallback to application/json content type.
+
+Implementation should by default fallback to application/json content type 
+request body serializer if no request content-type header is provided.
+Implementation should also by default fallback to application/json content type
+response body deserializer if no response content-type header is received from the server.
+
 Nevertheless, passsing request content-type explicitly in request headers is recommended.
+Because using a default request body serializer doesn't imply adding default content-type
+header to the actual request.
 
 #### `Slexphp\Http\SimpleApiClient\Contracts\ApiResponseInterface`
 
@@ -52,7 +57,6 @@ and it offers `getParsedBody()` method so that you dont need to worry about pars
 
 This interface describes all possible errors that can occur during a http call
 or during (de)serialization of request/response messages.
-
 
 
 And all requests are hidden in a single method `call` with several arguments:
@@ -82,7 +86,7 @@ try {
     assert($code === $status);
     var_dump($response->getHeaders());
     
-    if ($response->hasBody()) {
+    if ($response->getRawBody()) {
         var_dump($response->getRawBody());
         assert($response->getRawBody() !== '');
         if ($response->getParsedBody() === null) {
@@ -110,7 +114,7 @@ var_dump($status);
 assert($status >= 200 && $status < 300);
 var_dump($response->getHeaders());
 
-if ($response->hasBody()) {
+if ($response->getRawBody()) {
     var_dump($response->getRawBody());
     assert($response->getRawBody() !== '');
     var_dump($response->getParsedBody());
