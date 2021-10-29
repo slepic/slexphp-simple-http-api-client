@@ -115,6 +115,7 @@ class PsrApiClient implements ApiClientInterface
         $error = null;
         $errorMessage = null;
         $responseBody = (string) $psrResponse->getBody();
+        /** @var array|null $parsedBody */
         if ($responseBody !== '') {
             $contentType = $psrResponse->getHeaderLine('Content-Type') ?: $this->defaultContentType;
 
@@ -125,14 +126,14 @@ class PsrApiClient implements ApiClientInterface
                 $errorMessage = 'Cannot decode response body: ' . $error->getMessage();
             }
 
-            if (!isset($parsedResponse) || !\is_array($parsedResponse)) {
-                $parsedResponse = null;
+            if (isset($parsedResponse) && \is_array($parsedResponse)) {
+                $parsedBody = $parsedResponse;
+            } else {
                 $errorMessage = $errorMessage ?? 'Response body does not contain array or object.';
             }
         }
 
-        /** @var array|null $parsedResponse */
-        $apiResponse = new ApiResponse($status, $responseHeaders, $responseBody, $parsedResponse ?? null);
+        $apiResponse = new ApiResponse($status, $responseHeaders, $responseBody, $parsedBody ?? null);
 
         if ($status < 200 || $status >= 300) {
             $errorMessage = \sprintf('Server returned error status code %d', $status);

@@ -36,10 +36,8 @@ final class JsonApiClient
         /** @var DecoderInterface<array> */
         $jsonDecoder = $jsonDecoder ?? new JsonAssocDecoder();
 
-        /** @var BodySerializer<array|object> */
         $serializer = new BodySerializer(['application/json' => $jsonEncoder]);
 
-        /** @var BodyDeserializer<array> */
         $deserializer = new BodyDeserializer([
             'application/json' => $jsonDecoder,
             'application/problem+json' => $jsonDecoder,
