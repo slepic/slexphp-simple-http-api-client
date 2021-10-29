@@ -18,12 +18,6 @@ use Slexphp\Http\SimpleApiClient\Contracts\ApiResponseInterface;
 
 class PsrApiClient implements ApiClientInterface
 {
-    private RequestFactoryInterface $requestFactory;
-    private ClientInterface $client;
-    private BodySerializerInterface $requestSerializer;
-    private BodyDeserializerInterface $responseDeserializer;
-    private string $defaultContentType;
-
     /**
      * @param RequestFactoryInterface $requestFactory
      * @param ClientInterface $client
@@ -32,17 +26,12 @@ class PsrApiClient implements ApiClientInterface
      * @param string $defaultContentType
      */
     public function __construct(
-        RequestFactoryInterface $requestFactory,
-        ClientInterface $client,
-        BodySerializerInterface $requestSerializer,
-        BodyDeserializerInterface $responseDeserializer,
-        string $defaultContentType
+        private RequestFactoryInterface $requestFactory,
+        private ClientInterface $client,
+        private BodySerializerInterface $requestSerializer,
+        private BodyDeserializerInterface $responseDeserializer,
+        private string $defaultContentType
     ) {
-        $this->requestFactory = $requestFactory;
-        $this->client = $client;
-        $this->requestSerializer = $requestSerializer;
-        $this->responseDeserializer = $responseDeserializer;
-        $this->defaultContentType = $defaultContentType;
     }
 
     public function call(
@@ -51,7 +40,7 @@ class PsrApiClient implements ApiClientInterface
         string $endpoint,
         array $query = [],
         array $headers = [],
-        $body = null
+        array|object|string|null $body = null
     ): ApiResponseInterface {
         $psrRequest = $this->createPsrRequest($baseUrl, $method, $endpoint, $query, $headers, $body);
 
@@ -80,7 +69,7 @@ class PsrApiClient implements ApiClientInterface
         string $endpoint,
         array $query = [],
         array $headers = [],
-        $body = null
+        array|object|string|null $body = null
     ): RequestInterface {
         $uri = $baseUrl
             . ($endpoint !== '' && $endpoint[0] !== '/' ? '/' : '')
@@ -126,6 +115,7 @@ class PsrApiClient implements ApiClientInterface
         $error = null;
         $errorMessage = null;
         $responseBody = (string) $psrResponse->getBody();
+        /** @var array|null $parsedBody */
         if ($responseBody !== '') {
             $contentType = $psrResponse->getHeaderLine('Content-Type') ?: $this->defaultContentType;
 
@@ -136,14 +126,14 @@ class PsrApiClient implements ApiClientInterface
                 $errorMessage = 'Cannot decode response body: ' . $error->getMessage();
             }
 
-            if (!isset($parsedResponse) || !\is_array($parsedResponse)) {
-                $parsedResponse = null;
+            if (isset($parsedResponse) && \is_array($parsedResponse)) {
+                $parsedBody = $parsedResponse;
+            } else {
                 $errorMessage = $errorMessage ?? 'Response body does not contain array or object.';
             }
         }
 
-        /** @var array|null $parsedResponse */
-        $apiResponse = new ApiResponse($status, $responseHeaders, $responseBody, $parsedResponse ?? null);
+        $apiResponse = new ApiResponse($status, $responseHeaders, $responseBody, $parsedBody ?? null);
 
         if ($status < 200 || $status >= 300) {
             $errorMessage = \sprintf('Server returned error status code %d', $status);

@@ -15,16 +15,10 @@ use Slexphp\Serialization\Contracts\Encoder\EncoderInterface;
 class BodySerializer implements BodySerializerInterface
 {
     /**
-     * @var array<string, EncoderInterface<T>>
-     */
-    private array $serializers;
-
-    /**
      * @param array<string, EncoderInterface<T>> $serializers
      */
-    public function __construct(array $serializers)
+    public function __construct(private array $serializers)
     {
-        $this->serializers = $serializers;
     }
 
     public function serializeBody(string $contentType, $parsedBody): string

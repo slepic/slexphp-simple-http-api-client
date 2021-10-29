@@ -6,14 +6,11 @@ namespace Slexphp\Http\SimpleApiClient\Contracts;
 
 class ApiClientException extends \Exception implements ApiClientExceptionInterface
 {
-    private ?ApiResponseInterface $response;
-
     public function __construct(
         string $message,
-        ?ApiResponseInterface $response,
+        private ?ApiResponseInterface $response,
         ?\Throwable $previous = null
     ) {
-        $this->response = $response;
         parent::__construct($message, $response ? $response->getStatusCode() : 0, $previous);
     }
 

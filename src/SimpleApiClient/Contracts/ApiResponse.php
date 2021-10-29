@@ -6,28 +6,18 @@ namespace Slexphp\Http\SimpleApiClient\Contracts;
 
 class ApiResponse implements ApiResponseInterface
 {
-    private int $status;
-
-    /**
-     * @var array<string, string>
-     */
-    private array $headers;
-
-    private string $rawBody;
-    private ?array $parsedBody;
-
     /**
      * @param int $status
      * @param array<string, string> $headers
      * @param string $rawBody
-     * @param array<mixed>|null $parsedBody
+     * @param array|null $parsedBody
      */
-    public function __construct(int $status, array $headers, string $rawBody, ?array $parsedBody = null)
-    {
-        $this->status = $status;
-        $this->headers = $headers;
-        $this->rawBody = $rawBody;
-        $this->parsedBody = $parsedBody;
+    public function __construct(
+        private int $status,
+        private array $headers,
+        private string $rawBody,
+        private ?array $parsedBody = null
+    ) {
     }
 
     public function getStatusCode(): int

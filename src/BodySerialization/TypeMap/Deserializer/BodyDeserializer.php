@@ -15,16 +15,10 @@ use Slexphp\Serialization\Contracts\Decoder\DecoderInterface;
 class BodyDeserializer implements BodyDeserializerInterface
 {
     /**
-     * @var array<string, DecoderInterface<T>>
-     */
-    private array $deserializers;
-
-    /**
      * @param array<string, DecoderInterface<T>> $deserializers
      */
-    public function __construct(array $deserializers)
+    public function __construct(private array $deserializers)
     {
-        $this->deserializers = $deserializers;
     }
 
     public function deserializeBody(string $contentType, string $rawBody)

@@ -25,6 +25,6 @@ interface ApiClientInterface
         string $endpoint,
         array $query = [],
         array $headers = [],
-        $body = null
+        array|object|string|null $body = null
     ): ApiResponseInterface;
 }
