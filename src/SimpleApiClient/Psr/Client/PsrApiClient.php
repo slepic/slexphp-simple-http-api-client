@@ -18,12 +18,6 @@ use Slexphp\Http\SimpleApiClient\Contracts\ApiResponseInterface;
 
 class PsrApiClient implements ApiClientInterface
 {
-    private RequestFactoryInterface $requestFactory;
-    private ClientInterface $client;
-    private BodySerializerInterface $requestSerializer;
-    private BodyDeserializerInterface $responseDeserializer;
-    private string $defaultContentType;
-
     /**
      * @param RequestFactoryInterface $requestFactory
      * @param ClientInterface $client
@@ -32,17 +26,12 @@ class PsrApiClient implements ApiClientInterface
      * @param string $defaultContentType
      */
     public function __construct(
-        RequestFactoryInterface $requestFactory,
-        ClientInterface $client,
-        BodySerializerInterface $requestSerializer,
-        BodyDeserializerInterface $responseDeserializer,
-        string $defaultContentType
+        private RequestFactoryInterface $requestFactory,
+        private ClientInterface $client,
+        private BodySerializerInterface $requestSerializer,
+        private BodyDeserializerInterface $responseDeserializer,
+        private string $defaultContentType
     ) {
-        $this->requestFactory = $requestFactory;
-        $this->client = $client;
-        $this->requestSerializer = $requestSerializer;
-        $this->responseDeserializer = $responseDeserializer;
-        $this->defaultContentType = $defaultContentType;
     }
 
     public function call(
@@ -51,7 +40,7 @@ class PsrApiClient implements ApiClientInterface
         string $endpoint,
         array $query = [],
         array $headers = [],
-        $body = null
+        array|object|string|null $body = null
     ): ApiResponseInterface {
         $psrRequest = $this->createPsrRequest($baseUrl, $method, $endpoint, $query, $headers, $body);
 
@@ -80,7 +69,7 @@ class PsrApiClient implements ApiClientInterface
         string $endpoint,
         array $query = [],
         array $headers = [],
-        $body = null
+        array|object|string|null $body = null
     ): RequestInterface {
         $uri = $baseUrl
             . ($endpoint !== '' && $endpoint[0] !== '/' ? '/' : '')

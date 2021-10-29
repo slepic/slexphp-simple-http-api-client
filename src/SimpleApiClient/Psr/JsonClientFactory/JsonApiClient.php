@@ -13,7 +13,6 @@ use Slexphp\Http\SimpleApiClient\Psr\Client\PsrApiClient;
 use Slexphp\Serialization\Contracts\Decoder\DecoderInterface;
 use Slexphp\Serialization\Contracts\Encoder\EncoderInterface;
 use Slexphp\Serialization\Json\Decoder\JsonAssocDecoder;
-use Slexphp\Serialization\Json\Decoder\JsonDecoder;
 use Slexphp\Serialization\Json\Encoder\JsonEncoder;
 
 final class JsonApiClient

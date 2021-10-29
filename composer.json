@@ -5,7 +5,7 @@
     "homepage": "https://github.com/slepic/slexphp-simple-http-api-client",
     "type": "library",
     "require": {
-        "php": ">=7.4",
+        "php": ">=8.0",
         "psr/http-factory": "^1.0",
         "psr/http-client": "^1.0",
         "slexphp/json-serialization": "^1.0"
